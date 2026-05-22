@@ -1,0 +1,33 @@
+services:
+  redis:
+    image: redis:7
+    container_name: leaderb-redis
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+  api:
+    build: ./api
+    container_name: leaderb-api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - API_KEY=<your_api_key>
+      - ALLOWED_ORIGINS=https://espleadert.simon-home-satisfactory.site
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: leaderb-cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=<your_tunnel_token>
+    depends_on:
+      - api
+
+volumes:
+  redis_data:
