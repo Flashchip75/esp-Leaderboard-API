@@ -17,7 +17,7 @@ services:
     environment:
       - REDIS_HOST=redis
       - API_KEY=<your_api_key>
-      - ALLOWED_ORIGINS=https://espleadert.simon-home-satisfactory.site
+      - ALLOWED_ORIGINS=<url>
 
   cloudflared:
     image: cloudflare/cloudflared:latest
